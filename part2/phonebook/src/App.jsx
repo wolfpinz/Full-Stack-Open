@@ -8,7 +8,10 @@ const App = () => {
 
   const addPerson = (event) => {
     event.preventDefault()
-    console.log(event.target.value)
+    if (doesNameAlreadyExist()) {
+      window.alert("Computer sagt 'nein'")
+      return
+    }
     const newPersonObj = {
       name: newName
     }
@@ -17,6 +20,11 @@ const App = () => {
   }
   const handleInputChange = (event) => {
     setNewName(event.target.value)
+  }
+
+  const doesNameAlreadyExist = () => {
+    const namesArray = persons.map((p) => p.name)
+    return namesArray.includes(newName)
   }
 
   return (
@@ -31,7 +39,6 @@ const App = () => {
         </div>
       </form>
       <h2>Numbers</h2>
-      <div>{newName}</div>
         {persons.map((person) => {
           return <div key={person.name}>{person.name}</div>
         })}
