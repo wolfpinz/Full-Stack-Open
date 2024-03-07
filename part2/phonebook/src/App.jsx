@@ -16,7 +16,8 @@ const App = () => {
 
   // GET ALL INITIAL
   useEffect(() => {
-    personService.getAll()
+    personService
+      .getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -32,13 +33,23 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    personService.create(newPersonObj)
+    personService
+      .create(newPersonObj)
       .then(response => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
       })
   }
+  // DELETE
+  const deletePerson = (person) => {
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .remove(person.id)
+        .then(setPersons(persons.filter(p => p.id != person.id)))
+    }
+  }
+
   const handleNameInputChange = (event) => {
     setNewName(event.target.value)
   }
@@ -68,7 +79,11 @@ const App = () => {
       />
       <h2>Numbers</h2>
         {personsToShow.map((person) => {
-          return <div key={person.name}>{person.name} {person.number && `(📞: ${person.number})`}</div>
+          return (
+            <div key={person.name}>
+              <span>{person.name} {person.number && `(📞: ${person.number})`} </span>
+              <button onClick={() => deletePerson(person)} >delete</button>
+            </div>)
         })}
     </div>
   )

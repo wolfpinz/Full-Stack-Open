@@ -12,7 +12,13 @@ const create = (newPersonObj) =>
     .post(baseURL, newPersonObj)
     .then(res => res)
 
+const remove = (id) =>
+  axios
+    .delete(`${baseURL}/${id}`)
+    .then(res => res)
+
 export default {
   getAll,
-  create
+  create,
+  remove
 }
