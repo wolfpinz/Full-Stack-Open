@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PersonForm from './personForm'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -36,14 +37,13 @@ const App = () => {
   const handlePhoneNumberInputChange = (event) => {
     setNewPhoneNumber(event.target.value)
   }
-  const handleFilterInputChange = (event) => {
-    setNewFilter(event.target.value)
-    setShowAll(false)
-  }
-
   const doesNameAlreadyExist = () => {
     const namesArray = persons.map((p) => p.name)
     return namesArray.includes(newName)
+  }
+  const handleFilterInputChange = (event) => {
+    setNewFilter(event.target.value)
+    setShowAll(false)
   }
 
   return (
@@ -51,13 +51,13 @@ const App = () => {
       <h2>Phonebook</h2>
       <div>filter shown: <input value={newFilter} onChange={handleFilterInputChange} /></div>
       <h2>Add new</h2>
-      <form onSubmit={addPerson}>
-        <div>name: <input value={newName} onChange={handleNameInputChange} /></div>
-        <div>phone: <input value={newPhoneNumber} onChange={handlePhoneNumberInputChange} /></div>
-        <div>
-          <button type="submit" >add</button>
-        </div>
-      </form>
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        handleNameInputChange={handleNameInputChange}
+        newPhoneNumber={newPhoneNumber}
+        handlePhoneNumberInputChange={handlePhoneNumberInputChange}
+      />
       <h2>Numbers</h2>
         {personsToShow.map((person) => {
           return <div key={person.name}>{person.name} {person.phoneNumber && `(📞: ${person.phoneNumber})`}</div>
