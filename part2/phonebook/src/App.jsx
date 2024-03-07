@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 import PersonForm from './personForm'
 
@@ -14,12 +14,9 @@ const App = () => {
     ? persons
     : persons.filter((person) => person.name.includes(newFilter))
 
-  // API
-  const baseURL = 'http://localhost:3001/persons'
   // GET ALL INITIAL
   useEffect(() => {
-    axios
-      .get(baseURL)
+    personService.getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -35,8 +32,7 @@ const App = () => {
       name: newName,
       number: newNumber
     }
-    axios
-      .post(baseURL, newPersonObj)
+    personService.create(newPersonObj)
       .then(response => {
         setPersons(persons.concat(response.data))
         setNewName('')
