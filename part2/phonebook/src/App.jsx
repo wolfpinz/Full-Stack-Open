@@ -14,6 +14,17 @@ const App = () => {
     ? persons
     : persons.filter((person) => person.name.includes(newFilter))
 
+  // API
+  const baseURL = 'http://localhost:3001/persons'
+  // GET ALL INITIAL
+  useEffect(() => {
+    axios
+      .get(baseURL)
+      .then(response => {
+        setPersons(response.data)
+      })
+  },[])
+  // CREATE
   const addPerson = (event) => {
     event.preventDefault()
     if (doesNameAlreadyExist()) {
@@ -22,11 +33,15 @@ const App = () => {
     }
     const newPersonObj = {
       name: newName,
-      Number: newNumber
+      number: newNumber
     }
-    setPersons(persons.concat(newPersonObj))
-    setNewName('')
-    setNewNumber('')
+    axios
+      .post(baseURL, newPersonObj)
+      .then(response => {
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('')
+      })
   }
   const handleNameInputChange = (event) => {
     setNewName(event.target.value)
@@ -42,15 +57,6 @@ const App = () => {
     setNewFilter(event.target.value)
     setShowAll(false)
   }
-  // API
-  useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log(response.data)
-        setPersons(response.data)
-      })
-  },[])
 
   return (
     <div>
