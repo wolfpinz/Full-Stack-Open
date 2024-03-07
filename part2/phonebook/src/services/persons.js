@@ -7,9 +7,14 @@ const getAll = () =>
     .get(baseURL)
     .then(res => res)
 
-const create = (newPersonObj) =>
+const create = (newPerson) =>
   axios
-    .post(baseURL, newPersonObj)
+    .post(baseURL, newPerson)
+    .then(res => res)
+
+const update = (id, updatedPerson) =>
+  axios
+    .put(`${baseURL}/${id}`, updatedPerson)
     .then(res => res)
 
 const remove = (id) =>
@@ -20,5 +25,6 @@ const remove = (id) =>
 export default {
   getAll,
   create,
-  remove
+  remove,
+  update
 }

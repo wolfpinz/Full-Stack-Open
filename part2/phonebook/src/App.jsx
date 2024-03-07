@@ -25,22 +25,35 @@ const App = () => {
   // CREATE
   const addPerson = (event) => {
     event.preventDefault()
+    // if name exists: update, otherwise create
     if (doesNameAlreadyExist()) {
-      window.alert("Computer sagt 'nein'")
-      return
-    }
-    const newPersonObj = {
+      const person = persons.find(p => p.name === newName)
+      if (window.confirm(`${person.name} is already a contact.
+      Do you want to replace the old number with the new one?`)) {
+        const updatedPerson = {...person, number: newNumber}
+        personService
+          .update(person.id, updatedPerson)
+          .then(res => {
+            const returnedPerson = res.data
+            console.log(returnedPerson)
+            setPersons(persons.map(p => p.id !== returnedPerson.id ? p : returnedPerson))
+          })
+      }
+    } else {
+    const newPerson = {
       name: newName,
       number: newNumber
     }
     personService
-      .create(newPersonObj)
+      .create(newPerson)
       .then(response => {
         setPersons(persons.concat(response.data))
-        setNewName('')
-        setNewNumber('')
       })
+    }
+    setNewName('')
+    setNewNumber('')
   }
+
   // DELETE
   const deletePerson = (person) => {
     if (window.confirm(`Delete ${person.name}?`)) {
